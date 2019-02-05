@@ -12,9 +12,9 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var slider: UISlider!
-    @IBOutlet weak var odometer: OdometerLabelV2!
+    @IBOutlet weak var odometer: OdometerLabel!
 
-    @IBOutlet weak var odometer2: OdometerLabelV2!
+    @IBOutlet weak var odometer2: OdometerLabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.

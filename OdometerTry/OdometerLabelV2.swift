@@ -1,7 +1,7 @@
 import UIKit
 
 
-class OdometerLabelV2: UIView {
+class OdometerLabel: UIView {
 
     private static let digits = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
 
@@ -25,7 +25,7 @@ class OdometerLabelV2: UIView {
         didSet {
             /* Measure single digit size */
             let attributes = [NSAttributedString.Key.font: self.font]
-            let attributedText = NSAttributedString(string: OdometerLabelV2.digits,
+            let attributedText = NSAttributedString(string: OdometerLabel.digits,
                                                     attributes: attributes)
             let textLayer = self.obtainDigitTextLayer()
             textLayer.font = self.font
@@ -37,12 +37,25 @@ class OdometerLabelV2: UIView {
             self.singleDigitSize = CGSize(width: size.width, height: preferedSize.height / 30)
             self.recycleTextLayer(textLayer)
 
+            for layer in self.digitLayers {
+                layer.font = self.font
+                layer.fontSize = self.font.pointSize
+            }
+
+            for layer in self.textLayers {
+                layer.font = self.font
+                layer.fontSize = self.font.pointSize
+            }
+
             self.setNumber(self.number, animated: false)
         }
     }
 
     var textColor: UIColor = UIColor.red {
         didSet {
+            for layer in self.digitLayers {
+                layer.foregroundColor = self.textColor.cgColor
+            }
             for textLayer in self.textLayers {
                 textLayer.foregroundColor = self.textColor.cgColor
             }
@@ -62,7 +75,7 @@ class OdometerLabelV2: UIView {
     private(set) var contentLayer = CALayer()
 
     /* Digit layer must be wrapped inside scroll layer,
-       scroll layer will have 1-1 relationship to digit layer */
+     scroll layer will have 1-1 relationship to digit layer */
     private var scrollLayers = [OLScrollLayer]()
     private var digitLayers = [CATextLayer]()
     private var textLayers = [CATextLayer]()
@@ -128,10 +141,11 @@ class OdometerLabelV2: UIView {
         for index in self.allLayers.indices {
             let layerSize = self.sizeForLayer(self.allLayers[index])
             self.allLayers[index].frame = CGRect(x: xStart - layerSize.width,
-                                                     y: (digitHeight - layerSize.height) / 2,
-                                                     width: layerSize.width,
-                                                     height: layerSize.height)
-            xStart = xStart - self.horizontalSpacing - layerSize.width
+                                                 y: (digitHeight - layerSize.height) / 2,
+                                                 width: layerSize.width,
+                                                 height: layerSize.height)
+            xStart -= self.horizontalSpacing
+            xStart -= layerSize.width
             /* for animation */
             if index < (measureSize ?? Int.max) {
                 xMin = xStart
@@ -155,8 +169,6 @@ class OdometerLabelV2: UIView {
                                              width: width,
                                              height: digitHeight)
         }
-
-
     }
 
     private func calculateScrollPositions(animationMode: Bool) {
@@ -172,13 +184,13 @@ class OdometerLabelV2: UIView {
             var yPos = CGFloat(digit) * digitHeight - (height - digitHeight) / 2
 
             if animationMode {
-                let top = yPos
+                let topPos = yPos
                 let bottom = yPos + digitHeight * 20
                 let center = yPos + digitHeight * 10
                 let curr = self.scrollLayers[layerIndex].contentOffset.y
-                if abs(top - curr) < abs(bottom - curr) && abs(top - curr) < abs(center - curr) {
-                    yPos = top
-                } else if abs(bottom - curr) < abs(top - curr) && abs(bottom - curr) < abs(center - curr) {
+                if abs(topPos - curr) < abs(bottom - curr) && abs(topPos - curr) < abs(center - curr) {
+                    yPos = topPos
+                } else if abs(bottom - curr) < abs(topPos - curr) && abs(bottom - curr) < abs(center - curr) {
                     yPos = bottom
                 } else {
                     yPos = center
@@ -210,13 +222,12 @@ class OdometerLabelV2: UIView {
             }
             return CGSize(width: self.singleDigitSize?.width ?? 0,
                           height: self.bounds.height)
-        } else if let textLayer = layer as? CATextLayer{
+        } else if let textLayer = layer as? CATextLayer {
             /* It's a text */
             return textLayer.preferredFrameSize()
         }
         return CGSize.zero
     }
-
 
     public func setNumber(_ number: String, animated: Bool) {
         let result = decode_segments(from: number)
@@ -247,22 +258,22 @@ class OdometerLabelV2: UIView {
 
         /* Reorder all layers */
         self.allLayers.removeAll()
-        var i = 0
-        var j = 0
+        var posDigit = 0
+        var posText = 0
         for segment in result.segments.reversed() {
             if segment.isDigit {
-                self.allLayers.append(self.scrollLayers[i])
-                i += 1
+                self.allLayers.append(self.scrollLayers[posDigit])
+                posDigit += 1
             } else {
-                self.textLayers[j].string = segment.content
-                self.allLayers.append(self.textLayers[j])
-                j += 1
+                self.textLayers[posText].string = segment.content
+                self.allLayers.append(self.textLayers[posText])
+                posText += 1
             }
         }
 
-        while i < self.scrollLayers.count {
-            self.allLayers.append(self.scrollLayers[i])
-            i += 1
+        while posDigit < self.scrollLayers.count {
+            self.allLayers.append(self.scrollLayers[posDigit])
+            posDigit += 1
         }
 
         /* Render current number again without any animation */
@@ -332,19 +343,19 @@ class OdometerLabelV2: UIView {
         } else {
             textLayer = self.recycledTextLayers.removeLast()
         }
-        textLayer!.truncationMode = CATextLayerTruncationMode.middle
+        //        textLayer!.truncationMode = kCATruncationMiddle
         textLayer!.backgroundColor = UIColor.clear.cgColor
         textLayer!.contentsScale = UIScreen.main.scale
         textLayer!.font = self.font
         textLayer!.fontSize = self.font.pointSize
         textLayer!.foregroundColor = self.textColor.cgColor
-        textLayer?.alignmentMode = CATextLayerAlignmentMode.center
+        textLayer?.alignmentMode = .center
         return textLayer!
     }
 
     private func obtainDigitTextLayer() -> CATextLayer {
         let textLayer = self.obtainTextLayer()
-        textLayer.string = OdometerLabelV2.digits
+        textLayer.string = OdometerLabel.digits
         return textLayer
     }
 
@@ -359,9 +370,9 @@ private let digits = CharacterSet.decimalDigits
 private class OLScrollLayer: CAScrollLayer {
     var contentOffset = CGPoint.zero
 
-    override func scroll(to p: CGPoint) {
-        super.scroll(to: p)
-        self.contentOffset = p
+    override func scroll(to point: CGPoint) {
+        super.scroll(to: point)
+        self.contentOffset = point
     }
 }
 
@@ -375,19 +386,19 @@ private func decode_segments(from: String) -> (segments: [Segment], digitCount: 
     var curr = ""
     var digitCount = 0
     var textCount = 0
-    for c in from.unicodeScalars {
-        if digits.contains(c) {
+    for char in from.unicodeScalars {
+        if digits.contains(char) {
             if !curr.isEmpty {
                 segments.append(Segment(content: curr,
                                         isDigit: false))
                 curr = ""
                 textCount += 1
             }
-            segments.append(Segment(content: String(c),
+            segments.append(Segment(content: String(char),
                                     isDigit: true))
             digitCount += 1
         } else {
-            curr += String(c)
+            curr += String(char)
         }
     }
     if !curr.isEmpty {
