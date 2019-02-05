@@ -1,0 +1,344 @@
+import UIKit
+
+
+class OdometerLabelV2: UIView {
+
+    /* Customization
+
+     1. Animation Duration
+     2. Text Alignment, left, right or center
+     3. Font
+     4. Text Color
+     5. Horizontal Spacing
+     */
+    var animationDuration: TimeInterval = 0.5
+
+    var textAlignment: NSTextAlignment = .center {
+        didSet {
+            self.setNumber(self.number, animated: false)
+        }
+    }
+
+    var font: UIFont = UIFont.systemFont(ofSize: 20) {
+        didSet {
+            /* Measure single digit size */
+            let attributes = [NSAttributedString.Key.font: self.font]
+            let attributedText = NSAttributedString(string: "0\n1\n2\n3\n4\n5\n6\n7\n8\n9",
+                                                    attributes: attributes)
+            let textLayer = self.obtainDigitTextLayer()
+            textLayer.font = self.font
+            textLayer.fontSize = self.font.pointSize
+            textLayer.contentsScale = UIScreen.main.scale
+
+            let size = attributedText.size()
+            let preferedSize = textLayer.preferredFrameSize()
+            self.singleDigitSize = CGSize(width: size.width, height: preferedSize.height / 10)
+            self.recycleTextLayer(textLayer)
+
+            self.setNumber(self.number, animated: false)
+        }
+    }
+
+    var textColor: UIColor = UIColor.red {
+        didSet {
+            for textLayer in self.textLayers {
+                textLayer.foregroundColor = self.textColor.cgColor
+            }
+            self.setNumber(self.number, animated: false)
+        }
+    }
+
+    var horizontalSpacing: CGFloat = 0 {
+        didSet {
+            self.setNumber(self.number, animated: false)
+        }
+    }
+
+    /* Private attributes */
+
+    private(set) var number: String = "0"
+    private var contentLayer = CALayer()
+
+    /* Digit layer must be wrapped inside scroll layer,
+       scroll layer will have 1-1 relationship to digit layer */
+    private var scrollLayers = [CAScrollLayer]()
+    private var digitLayers = [CATextLayer]()
+    private var textLayers = [CATextLayer]()
+
+    /* All Layers in order */
+    private var allLayers = [CALayer]()
+
+    /* Each digit size, measured when font is set */
+    private var singleDigitSize: CGSize?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.commonInit()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.commonInit()
+    }
+
+    private func commonInit() {
+        self.layer.addSublayer(self.contentLayer)
+        self.font = UIFont.systemFont(ofSize: 20)
+        self.setNumber(self.number, animated: false)
+    }
+
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        self.doLayoutNumber()
+    }
+
+    override func sizeToFit() {
+        let size = self.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
+        self.bounds = CGRect(origin: CGPoint.zero, size: size)
+    }
+
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        var wantedWidth: CGFloat = 0
+
+        let digitWidth = self.singleDigitSize?.width ?? 0
+        let digitHeight = self.singleDigitSize?.height ?? 0
+
+        wantedWidth += digitWidth * CGFloat(self.scrollLayers.count)
+        for textLayer in self.textLayers {
+            wantedWidth += textLayer.preferredFrameSize().width
+        }
+        wantedWidth += CGFloat(self.allLayers.count - 1) * self.horizontalSpacing
+        return CGSize(width: min(size.width, wantedWidth),
+                      height: min(size.height, digitHeight))
+    }
+
+    private func doLayoutNumber(measureSize: Int? = nil) {
+        let width = layer.bounds.width
+        let height = layer.bounds.height
+
+        /* Layout all layers */
+        var xStart: CGFloat = width
+        var xMin: CGFloat = 0
+        for index in self.allLayers.indices {
+            let layerSize = self.sizeForLayer(self.allLayers[index])
+            self.allLayers[index].frame = CGRect(x: xStart - layerSize.width,
+                                                     y: (height - layerSize.height) / 2,
+                                                     width: layerSize.width,
+                                                     height: layerSize.height)
+            xStart = xStart - self.horizontalSpacing - layerSize.width
+            /* for animation */
+            if index < (measureSize ?? Int.max) {
+                xMin = xStart
+            }
+        }
+
+        /* Calculate scroll position */
+        let numbersOnly = Array(self.number.components(separatedBy: CharacterSet.decimalDigits.inverted).joined())
+        var layerIndex = 0
+
+        let digitHeight = self.singleDigitSize?.height ?? 0
+        while layerIndex >= 0 && layerIndex < numbersOnly.count {
+            let digit = Int(String(numbersOnly[numbersOnly.count - layerIndex - 1]))!
+            let yPos = CGFloat(digit) * digitHeight - (height - digitHeight) / 2
+            self.scrollLayers[layerIndex].scroll(to: CGPoint(x: 0, y: yPos))
+            layerIndex += 1
+        }
+
+        /* For any scroll layer not used, scroll to blank */
+        while layerIndex < self.scrollLayers.count {
+            self.scrollLayers[layerIndex].scroll(to: CGPoint(x: 0, y: -height))
+            layerIndex += 1
+        }
+
+        /* Layout Content based on alignment */
+        if self.textAlignment == .left {
+            self.contentLayer.frame = CGRect(x: -xMin, y: 0, width: width, height: height)
+        } else if self.textAlignment == .center {
+            let textWidth = width - xMin
+            self.contentLayer.frame = CGRect(x: -(width - textWidth) / 2, y: 0, width: width, height: height)
+        } else {
+            self.contentLayer.frame = CGRect(x: 0, y: 0, width: width, height: height)
+        }
+    }
+
+    /* Get size for given layer */
+    private func sizeForLayer(_ layer: CALayer) -> CGSize {
+        if let scrollLayer = layer as? CAScrollLayer {
+            /* It's a digit */
+            if let digitLayer = scrollLayer.sublayers?.first {
+                digitLayer.frame = CGRect(x: 0,
+                                          y: 0,
+                                          width: self.singleDigitSize?.width ?? 0,
+                                          height: (self.singleDigitSize?.height ?? 0) * 10)
+            }
+            return CGSize(width: self.singleDigitSize?.width ?? 0,
+                          height: self.bounds.height)
+        } else if let textLayer = layer as? CATextLayer{
+            /* It's a text */
+            return textLayer.preferredFrameSize()
+        }
+        return CGSize.zero
+    }
+
+    let digits = CharacterSet.decimalDigits
+
+    public func setNumber(_ number: String, animated: Bool) {
+        let result = decode_segments(from: number)
+
+        /* Remove any extra text layers */
+        while self.textLayers.count > result.textCount {
+            let last = self.textLayers.removeLast()
+            last.removeFromSuperlayer()
+        }
+        /* Add in any missing text layers */
+        while self.textLayers.count < result.textCount {
+            let textLayer = self.obtainTextLayer()
+            self.textLayers.append(textLayer)
+            self.contentLayer.addSublayer(textLayer)
+        }
+
+        /* Add in any missing digit layer (wrapped inside scroll layer) */
+        if self.scrollLayers.count < result.digitCount {
+            for _ in 0..<(result.digitCount - self.scrollLayers.count) {
+                let digitLayer = self.obtainDigitTextLayer()
+                let scrollLayer = self.obtainScrollLayer()
+                self.digitLayers.append(digitLayer)
+                self.scrollLayers.append(scrollLayer)
+                scrollLayer.addSublayer(digitLayer)
+                self.contentLayer.addSublayer(scrollLayer)
+            }
+        }
+
+        /* Reorder all layers */
+        self.allLayers.removeAll()
+        var i = 0
+        var j = 0
+        for segment in result.segments.reversed() {
+            if segment.isDigit {
+                self.allLayers.append(self.scrollLayers[i])
+                i += 1
+            } else {
+                self.textLayers[j].string = segment.content
+                self.allLayers.append(self.textLayers[j])
+                j += 1
+            }
+        }
+
+        while i < self.scrollLayers.count {
+            self.allLayers.append(self.scrollLayers[i])
+            i += 1
+        }
+
+        /* Render current number again without any animation */
+        CATransaction.begin()
+        CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
+        let currResult = decode_segments(from: self.number)
+        self.doLayoutNumber(measureSize: currResult.digitCount + currResult.textCount)
+        CATransaction.commit()
+
+        self.number = number
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            if animated {
+                CATransaction.begin()
+                CATransaction.setAnimationDuration(self.animationDuration)
+                CATransaction.setCompletionBlock {
+                    self.recycleUnusedLayersIfAny()
+                }
+                self.doLayoutNumber(measureSize: result.digitCount + result.textCount)
+                CATransaction.commit()
+            } else {
+                CATransaction.begin()
+                CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
+                self.doLayoutNumber(measureSize: result.digitCount + result.textCount)
+                CATransaction.commit()
+                self.recycleUnusedLayersIfAny()
+            }
+        }
+    }
+
+    private func recycleUnusedLayersIfAny() {
+        let result = decode_segments(from: self.number)
+        let currCount = self.scrollLayers.count
+        let neededCount = result.digitCount
+        if currCount > neededCount {
+            for _ in 0..<(currCount - neededCount) {
+                let last = self.digitLayers.removeLast()
+                last.removeFromSuperlayer()
+                let lastScroll = self.scrollLayers.removeLast()
+                lastScroll.removeFromSuperlayer()
+                self.allLayers.removeAll(where: {$0 == lastScroll})
+                self.recycleTextLayer(last)
+            }
+        }
+    }
+
+    /* Text Layer Management */
+
+    var recycledTextLayers = [CATextLayer]()
+
+    private func recycleTextLayer(_ textLayer: CATextLayer) {
+        self.recycledTextLayers.append(textLayer)
+    }
+
+    private func obtainTextLayer() -> CATextLayer {
+        var textLayer: CATextLayer?
+        if self.recycledTextLayers.isEmpty {
+            textLayer = CATextLayer()
+        } else {
+            textLayer = self.recycledTextLayers.removeLast()
+        }
+        textLayer!.truncationMode = CATextLayerTruncationMode.middle
+        textLayer!.backgroundColor = UIColor.clear.cgColor
+        textLayer!.contentsScale = UIScreen.main.scale
+        textLayer!.font = self.font
+        textLayer!.fontSize = self.font.pointSize
+        textLayer!.foregroundColor = self.textColor.cgColor
+        textLayer?.alignmentMode = CATextLayerAlignmentMode.left
+        return textLayer!
+    }
+
+    private func obtainDigitTextLayer() -> CATextLayer {
+        let textLayer = self.obtainTextLayer()
+        textLayer.string = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+        return textLayer
+    }
+
+    private func obtainScrollLayer() -> CAScrollLayer {
+        let scrollLayer = CAScrollLayer()
+        return scrollLayer
+    }
+}
+
+private let digits = CharacterSet.decimalDigits
+
+private struct Segment {
+    var content: String
+    var isDigit: Bool
+}
+
+private func decode_segments(from: String) -> (segments: [Segment], digitCount: Int, textCount: Int) {
+    var segments = [Segment]()
+    var curr = ""
+    var digitCount = 0
+    var textCount = 0
+    for c in from.unicodeScalars {
+        if digits.contains(c) {
+            if !curr.isEmpty {
+                segments.append(Segment(content: curr,
+                                        isDigit: false))
+                curr = ""
+                textCount += 1
+            }
+            segments.append(Segment(content: String(c),
+                                    isDigit: true))
+            digitCount += 1
+        } else {
+            curr += String(c)
+        }
+    }
+    if !curr.isEmpty {
+        segments.append(Segment(content: curr, isDigit: false))
+        textCount += 1
+    }
+    return (segments: segments, digitCount: digitCount, textCount: textCount)
+}
