@@ -13,7 +13,7 @@ class OdometerLabelV2: UIView {
      4. Text Color
      5. Horizontal Spacing
      */
-    var animationDuration: TimeInterval = 1.5
+    var animationDuration: TimeInterval = 0.5
 
     var textAlignment: NSTextAlignment = .center {
         didSet {
@@ -137,7 +137,6 @@ class OdometerLabelV2: UIView {
                 xMin = xStart
             }
         }
-        self.contentLayer.backgroundColor = UIColor.yellow.cgColor
         /* Layout Content based on alignment */
         if self.textAlignment == .left {
             self.contentLayer.frame = CGRect(x: -xMin,
@@ -177,9 +176,6 @@ class OdometerLabelV2: UIView {
                 let bottom = yPos + digitHeight * 20
                 let center = yPos + digitHeight * 10
                 let curr = self.scrollLayers[layerIndex].contentOffset.y
-                if numbersOnly.count < 4 {
-                    print("TBC", top, center, bottom, "curr", curr)
-                }
                 if abs(top - curr) < abs(bottom - curr) && abs(top - curr) < abs(center - curr) {
                     yPos = top
                 } else if abs(bottom - curr) < abs(top - curr) && abs(bottom - curr) < abs(center - curr) {
@@ -284,6 +280,12 @@ class OdometerLabelV2: UIView {
                 CATransaction.setAnimationDuration(self.animationDuration)
                 CATransaction.setCompletionBlock {
                     self.recycleUnusedLayersIfAny()
+
+                    /* Move scroll position back to center */
+                    CATransaction.begin()
+                    CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
+                    self.calculateScrollPositions(animationMode: false)
+                    CATransaction.commit()
                 }
                 self.doLayoutNumber(measureSize: result.digitCount + result.textCount)
                 self.calculateScrollPositions(animationMode: true)
@@ -336,7 +338,7 @@ class OdometerLabelV2: UIView {
         textLayer!.font = self.font
         textLayer!.fontSize = self.font.pointSize
         textLayer!.foregroundColor = self.textColor.cgColor
-        textLayer?.alignmentMode = CATextLayerAlignmentMode.left
+        textLayer?.alignmentMode = CATextLayerAlignmentMode.center
         return textLayer!
     }
 
