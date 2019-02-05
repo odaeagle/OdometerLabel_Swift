@@ -33,15 +33,13 @@ class ViewController: UIViewController {
         formatter.numberStyle = .currency
         let newNumber = Int.random(in: Int(truncating: pow(10, Int(self.slider.value) - 1) as NSDecimalNumber) ..< Int(truncating: pow(10, Int(self.slider.value)) as NSDecimalNumber))
         formatter.locale = Locale(identifier: "fr_CA")
-        formatter.groupingSeparator = " "
         let pstring = formatter.string(from: newNumber as! NSNumber) ?? ""
         print(formatter.locale)
         self.odometer.setNumber(pstring, animated: true)
         self.label.text = pstring
 
         formatter.locale = Locale(identifier: "en_CA")
-        formatter.groupingSeparator = " "
-        let pstring2 = formatter.string(from: newNumber as! NSNumber) ?? ""
+        let pstring2 = formatter.string(from: Int(self.slider.value) as! NSNumber) ?? ""
         self.odometer2.setNumber(pstring2, animated: true)
     }
     @IBAction func valueEditingEnd(_ sender: Any) {

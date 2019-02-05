@@ -3,6 +3,8 @@ import UIKit
 
 class OdometerLabelV2: UIView {
 
+    private static let digits = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+
     /* Customization
 
      1. Animation Duration
@@ -11,7 +13,7 @@ class OdometerLabelV2: UIView {
      4. Text Color
      5. Horizontal Spacing
      */
-    var animationDuration: TimeInterval = 0.5
+    var animationDuration: TimeInterval = 1.5
 
     var textAlignment: NSTextAlignment = .center {
         didSet {
@@ -23,7 +25,7 @@ class OdometerLabelV2: UIView {
         didSet {
             /* Measure single digit size */
             let attributes = [NSAttributedString.Key.font: self.font]
-            let attributedText = NSAttributedString(string: "0\n1\n2\n3\n4\n5\n6\n7\n8\n9",
+            let attributedText = NSAttributedString(string: OdometerLabelV2.digits,
                                                     attributes: attributes)
             let textLayer = self.obtainDigitTextLayer()
             textLayer.font = self.font
@@ -32,7 +34,7 @@ class OdometerLabelV2: UIView {
 
             let size = attributedText.size()
             let preferedSize = textLayer.preferredFrameSize()
-            self.singleDigitSize = CGSize(width: size.width, height: preferedSize.height / 10)
+            self.singleDigitSize = CGSize(width: size.width, height: preferedSize.height / 30)
             self.recycleTextLayer(textLayer)
 
             self.setNumber(self.number, animated: false)
@@ -57,11 +59,11 @@ class OdometerLabelV2: UIView {
     /* Private attributes */
 
     private(set) var number: String = "0"
-    private var contentLayer = CALayer()
+    private(set) var contentLayer = CALayer()
 
     /* Digit layer must be wrapped inside scroll layer,
        scroll layer will have 1-1 relationship to digit layer */
-    private var scrollLayers = [CAScrollLayer]()
+    private var scrollLayers = [OLScrollLayer]()
     private var digitLayers = [CATextLayer]()
     private var textLayers = [CATextLayer]()
 
@@ -83,6 +85,8 @@ class OdometerLabelV2: UIView {
 
     private func commonInit() {
         self.layer.addSublayer(self.contentLayer)
+        self.layer.masksToBounds = true
+        self.contentLayer.masksToBounds = true
         self.font = UIFont.systemFont(ofSize: 20)
         self.setNumber(self.number, animated: false)
     }
@@ -90,6 +94,7 @@ class OdometerLabelV2: UIView {
     override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
         self.doLayoutNumber()
+        self.calculateScrollPositions(animationMode: false)
     }
 
     override func sizeToFit() {
@@ -116,13 +121,14 @@ class OdometerLabelV2: UIView {
         let width = layer.bounds.width
         let height = layer.bounds.height
 
+        let digitHeight = self.singleDigitSize?.height ?? 0
         /* Layout all layers */
         var xStart: CGFloat = width
         var xMin: CGFloat = 0
         for index in self.allLayers.indices {
             let layerSize = self.sizeForLayer(self.allLayers[index])
             self.allLayers[index].frame = CGRect(x: xStart - layerSize.width,
-                                                     y: (height - layerSize.height) / 2,
+                                                     y: (digitHeight - layerSize.height) / 2,
                                                      width: layerSize.width,
                                                      height: layerSize.height)
             xStart = xStart - self.horizontalSpacing - layerSize.width
@@ -131,6 +137,31 @@ class OdometerLabelV2: UIView {
                 xMin = xStart
             }
         }
+        self.contentLayer.backgroundColor = UIColor.yellow.cgColor
+        /* Layout Content based on alignment */
+        if self.textAlignment == .left {
+            self.contentLayer.frame = CGRect(x: -xMin,
+                                             y: (height - digitHeight) / 2,
+                                             width: width,
+                                             height: digitHeight)
+        } else if self.textAlignment == .center {
+            let textWidth = width - xMin
+            self.contentLayer.frame = CGRect(x: -(width - textWidth) / 2,
+                                             y: (height - digitHeight) / 2,
+                                             width: width,
+                                             height: digitHeight)
+        } else {
+            self.contentLayer.frame = CGRect(x: 0,
+                                             y: (height - digitHeight) / 2,
+                                             width: width,
+                                             height: digitHeight)
+        }
+
+
+    }
+
+    private func calculateScrollPositions(animationMode: Bool) {
+        let height = layer.bounds.height
 
         /* Calculate scroll position */
         let numbersOnly = Array(self.number.components(separatedBy: CharacterSet.decimalDigits.inverted).joined())
@@ -139,7 +170,27 @@ class OdometerLabelV2: UIView {
         let digitHeight = self.singleDigitSize?.height ?? 0
         while layerIndex >= 0 && layerIndex < numbersOnly.count {
             let digit = Int(String(numbersOnly[numbersOnly.count - layerIndex - 1]))!
-            let yPos = CGFloat(digit) * digitHeight - (height - digitHeight) / 2
+            var yPos = CGFloat(digit) * digitHeight - (height - digitHeight) / 2
+
+            if animationMode {
+                let top = yPos
+                let bottom = yPos + digitHeight * 20
+                let center = yPos + digitHeight * 10
+                let curr = self.scrollLayers[layerIndex].contentOffset.y
+                if numbersOnly.count < 4 {
+                    print("TBC", top, center, bottom, "curr", curr)
+                }
+                if abs(top - curr) < abs(bottom - curr) && abs(top - curr) < abs(center - curr) {
+                    yPos = top
+                } else if abs(bottom - curr) < abs(top - curr) && abs(bottom - curr) < abs(center - curr) {
+                    yPos = bottom
+                } else {
+                    yPos = center
+                }
+            } else {
+                yPos += digitHeight * 10
+            }
+
             self.scrollLayers[layerIndex].scroll(to: CGPoint(x: 0, y: yPos))
             layerIndex += 1
         }
@@ -148,16 +199,6 @@ class OdometerLabelV2: UIView {
         while layerIndex < self.scrollLayers.count {
             self.scrollLayers[layerIndex].scroll(to: CGPoint(x: 0, y: -height))
             layerIndex += 1
-        }
-
-        /* Layout Content based on alignment */
-        if self.textAlignment == .left {
-            self.contentLayer.frame = CGRect(x: -xMin, y: 0, width: width, height: height)
-        } else if self.textAlignment == .center {
-            let textWidth = width - xMin
-            self.contentLayer.frame = CGRect(x: -(width - textWidth) / 2, y: 0, width: width, height: height)
-        } else {
-            self.contentLayer.frame = CGRect(x: 0, y: 0, width: width, height: height)
         }
     }
 
@@ -169,7 +210,7 @@ class OdometerLabelV2: UIView {
                 digitLayer.frame = CGRect(x: 0,
                                           y: 0,
                                           width: self.singleDigitSize?.width ?? 0,
-                                          height: (self.singleDigitSize?.height ?? 0) * 10)
+                                          height: (self.singleDigitSize?.height ?? 0) * 30)
             }
             return CGSize(width: self.singleDigitSize?.width ?? 0,
                           height: self.bounds.height)
@@ -180,7 +221,6 @@ class OdometerLabelV2: UIView {
         return CGSize.zero
     }
 
-    let digits = CharacterSet.decimalDigits
 
     public func setNumber(_ number: String, animated: Bool) {
         let result = decode_segments(from: number)
@@ -234,6 +274,7 @@ class OdometerLabelV2: UIView {
         CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
         let currResult = decode_segments(from: self.number)
         self.doLayoutNumber(measureSize: currResult.digitCount + currResult.textCount)
+        self.calculateScrollPositions(animationMode: false)
         CATransaction.commit()
 
         self.number = number
@@ -245,11 +286,13 @@ class OdometerLabelV2: UIView {
                     self.recycleUnusedLayersIfAny()
                 }
                 self.doLayoutNumber(measureSize: result.digitCount + result.textCount)
+                self.calculateScrollPositions(animationMode: true)
                 CATransaction.commit()
             } else {
                 CATransaction.begin()
                 CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
                 self.doLayoutNumber(measureSize: result.digitCount + result.textCount)
+                self.calculateScrollPositions(animationMode: false)
                 CATransaction.commit()
                 self.recycleUnusedLayersIfAny()
             }
@@ -299,17 +342,26 @@ class OdometerLabelV2: UIView {
 
     private func obtainDigitTextLayer() -> CATextLayer {
         let textLayer = self.obtainTextLayer()
-        textLayer.string = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+        textLayer.string = OdometerLabelV2.digits
         return textLayer
     }
 
-    private func obtainScrollLayer() -> CAScrollLayer {
-        let scrollLayer = CAScrollLayer()
+    private func obtainScrollLayer() -> OLScrollLayer {
+        let scrollLayer = OLScrollLayer()
         return scrollLayer
     }
 }
 
 private let digits = CharacterSet.decimalDigits
+
+private class OLScrollLayer: CAScrollLayer {
+    var contentOffset = CGPoint.zero
+
+    override func scroll(to p: CGPoint) {
+        super.scroll(to: p)
+        self.contentOffset = p
+    }
+}
 
 private struct Segment {
     var content: String
