@@ -39,8 +39,8 @@ class ViewController: UIViewController {
         self.label.text = pstring
 
         formatter.locale = Locale(identifier: "en_CA")
-        let pstring2 = formatter.string(from: Int(self.slider.value) as! NSNumber) ?? ""
-        self.odometer2.setNumber(pstring2, animated: true)
+        let pstring2 = formatter.string(from: newNumber as! NSNumber) ?? ""
+        self.odometer2.setNumber(pstring2, animated: false)
     }
     @IBAction func valueEditingEnd(_ sender: Any) {
 

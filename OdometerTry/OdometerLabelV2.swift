@@ -276,17 +276,17 @@ class OdometerLabel: UIView {
             posDigit += 1
         }
 
-        /* Render current number again without any animation */
-        CATransaction.begin()
-        CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
-        let currResult = decode_segments(from: self.number)
-        self.doLayoutNumber(measureSize: currResult.digitCount + currResult.textCount)
-        self.calculateScrollPositions(animationMode: false)
-        CATransaction.commit()
+        if animated {
+            /* Render current number again without any animation */
+            CATransaction.begin()
+            CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
+            let currResult = decode_segments(from: self.number)
+            self.doLayoutNumber(measureSize: currResult.digitCount + currResult.textCount)
+            self.calculateScrollPositions(animationMode: false)
+            CATransaction.commit()
 
-        self.number = number
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-            if animated {
+            self.number = number
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 CATransaction.begin()
                 CATransaction.setAnimationDuration(self.animationDuration)
                 CATransaction.setCompletionBlock {
@@ -301,14 +301,23 @@ class OdometerLabel: UIView {
                 self.doLayoutNumber(measureSize: result.digitCount + result.textCount)
                 self.calculateScrollPositions(animationMode: true)
                 CATransaction.commit()
-            } else {
-                CATransaction.begin()
-                CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
-                self.doLayoutNumber(measureSize: result.digitCount + result.textCount)
-                self.calculateScrollPositions(animationMode: false)
-                CATransaction.commit()
-                self.recycleUnusedLayersIfAny()
             }
+        } else {
+            self.number = number
+            for layer in self.allLayers {
+                layer.opacity = 0
+            }
+            CATransaction.begin()
+            CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
+            CATransaction.setCompletionBlock {
+                for layer in self.allLayers {
+                    layer.opacity = 1
+                }
+            }
+            self.doLayoutNumber(measureSize: result.digitCount + result.textCount)
+            self.calculateScrollPositions(animationMode: false)
+            CATransaction.commit()
+            self.recycleUnusedLayersIfAny()
         }
     }
 
