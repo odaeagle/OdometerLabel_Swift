@@ -13,7 +13,7 @@ class OdometerLabel: UIView {
      4. Text Color
      5. Horizontal Spacing
      */
-    var animationDuration: TimeInterval = 0.5
+    var animationDuration: TimeInterval = 2
 
     var textAlignment: NSTextAlignment = .center {
         didSet {
@@ -307,6 +307,10 @@ class OdometerLabel: UIView {
             for layer in self.allLayers {
                 layer.opacity = 0
             }
+            for layer in self.allLayers {
+                layer.removeAllAnimations()
+            }
+            contentLayer.removeAllAnimations()
             CATransaction.begin()
             CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
             CATransaction.setCompletionBlock {
