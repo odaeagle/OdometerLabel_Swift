@@ -25,7 +25,7 @@ class ViewController: UIViewController {
 
 //        self.odometer.setNumber(Int(self.slider.value), animated: true)
     }
-static var animation: Bool = true
+static var animation: Bool = false
     @IBAction func stopSlider(_ sender: Any) {
         print(self.slider.value)
 
@@ -41,7 +41,7 @@ static var animation: Bool = true
         formatter.locale = Locale(identifier: "en_CA")
         let pstring2 = formatter.string(from: newNumber as! NSNumber) ?? ""
 
-        self.odometer2.setNumber(pstring2, animated: ViewController.animation)
+        self.odometer2.setNumber("", animated: ViewController.animation)
         ViewController.animation = !ViewController.animation
     }
     @IBAction func valueEditingEnd(_ sender: Any) {
