@@ -1,63 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="51p-9z-yws">
+    <device id="retina6_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Odometer Label Demo View Controller-->
+        <scene sceneID="Ltk-qe-gFL">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="OdometerTry" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <tableViewController id="51p-9z-yws" customClass="OdometerLabelDemoViewController" customModule="OdometerTry" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="LZ7-6K-cv8">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a1a-nO-XQ1" customClass="OdometerLabel" customModule="OdometerTry" customModuleProvider="target">
-                                <rect key="frame" x="74" y="184" width="240" height="76"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="10" minValue="1" maxValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="51Q-xm-CLp">
-                                <rect key="frame" x="44" y="618" width="287" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <action selector="stopSlider:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nKu-Y1-WgZ"/>
-                                    <action selector="valueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="bdC-d4-X0h"/>
-                                    <action selector="valueEditingEnd:" destination="BYZ-38-t0r" eventType="editingDidEnd" id="Amr-PF-lkK"/>
-                                </connections>
-                            </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iEg-EI-tNt">
-                                <rect key="frame" x="74" y="155" width="233" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hQN-0Z-maW" customClass="OdometerLabel" customModule="OdometerTry" customModuleProvider="target">
-                                <rect key="frame" x="59" y="304" width="240" height="294"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                    </view>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <sections>
+                            <tableViewSection id="XNk-Ci-Rb5">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="95" id="urz-Zb-TCJ">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="95"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="urz-Zb-TCJ" id="nFg-eI-eBk">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="94.666666666666671"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Odometer Label Demo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TuM-nC-6DA">
+                                                    <rect key="frame" x="28" y="19" width="358" height="57"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="34"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="TuM-nC-6DA" secondAttribute="bottom" constant="8" id="HeK-Si-z8x"/>
+                                                <constraint firstItem="TuM-nC-6DA" firstAttribute="top" secondItem="nFg-eI-eBk" secondAttribute="topMargin" constant="8" id="RwE-Iz-Lhy"/>
+                                                <constraint firstItem="TuM-nC-6DA" firstAttribute="leading" secondItem="nFg-eI-eBk" secondAttribute="leadingMargin" constant="8" id="dSS-nr-e1a"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="TuM-nC-6DA" secondAttribute="trailing" constant="8" id="jRn-vd-2Cf"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="104" id="xHY-MK-O3j">
+                                        <rect key="frame" x="0.0" y="95" width="414" height="104"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xHY-MK-O3j" id="UdN-hf-WdL">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="103.66666666666667"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0hM-Vz-fFy">
+                                                    <rect key="frame" x="20" y="11" width="374" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="24" id="x86-3B-Cnc"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xSm-gU-g6v" customClass="OdometerLabel" customModule="OdometerTry" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="47" width="374" height="39"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="39" id="hB7-SR-ItF"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="0hM-Vz-fFy" firstAttribute="leading" secondItem="UdN-hf-WdL" secondAttribute="leadingMargin" id="FW6-a5-zgB"/>
+                                                <constraint firstItem="xSm-gU-g6v" firstAttribute="leading" secondItem="UdN-hf-WdL" secondAttribute="leadingMargin" id="GAv-DV-Sb4"/>
+                                                <constraint firstItem="xSm-gU-g6v" firstAttribute="trailing" secondItem="UdN-hf-WdL" secondAttribute="trailingMargin" id="NEn-kq-xAu"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="0hM-Vz-fFy" secondAttribute="trailing" id="dqS-6A-oeU"/>
+                                                <constraint firstItem="xSm-gU-g6v" firstAttribute="top" secondItem="0hM-Vz-fFy" secondAttribute="bottom" constant="12" id="mrq-6c-Z5J"/>
+                                                <constraint firstItem="0hM-Vz-fFy" firstAttribute="top" secondItem="UdN-hf-WdL" secondAttribute="topMargin" id="w90-8w-zQj"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="137" id="Jq4-s1-qhU">
+                                        <rect key="frame" x="0.0" y="199" width="414" height="137"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Jq4-s1-qhU" id="SfZ-oz-Gpf">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="136.66666666666666"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Currency" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gHZ-jd-ug7">
+                                                    <rect key="frame" x="20" y="11" width="374" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="24" id="sR7-Nm-DSv"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BzQ-fi-7rd" customClass="OdometerLabel" customModule="OdometerTry" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="47" width="374" height="39"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="39" id="zBj-7n-WSp"/>
+                                                    </constraints>
+                                                </view>
+                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="3000" minValue="3000" maxValue="20000" translatesAutoresizingMaskIntoConstraints="NO" id="FOt-KF-tZe">
+                                                    <rect key="frame" x="18" y="98" width="378" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="29" id="f7D-DM-xcl"/>
+                                                    </constraints>
+                                                </slider>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="gHZ-jd-ug7" firstAttribute="leading" secondItem="SfZ-oz-Gpf" secondAttribute="leadingMargin" id="9zY-mw-6JF"/>
+                                                <constraint firstItem="BzQ-fi-7rd" firstAttribute="leading" secondItem="SfZ-oz-Gpf" secondAttribute="leadingMargin" id="Eqy-X0-ANm"/>
+                                                <constraint firstItem="FOt-KF-tZe" firstAttribute="trailing" secondItem="SfZ-oz-Gpf" secondAttribute="trailingMargin" id="YHf-wc-g4T"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="gHZ-jd-ug7" secondAttribute="trailing" id="dhi-df-wlP"/>
+                                                <constraint firstItem="gHZ-jd-ug7" firstAttribute="top" secondItem="SfZ-oz-Gpf" secondAttribute="topMargin" id="elL-mB-GsC"/>
+                                                <constraint firstItem="BzQ-fi-7rd" firstAttribute="trailing" secondItem="SfZ-oz-Gpf" secondAttribute="trailingMargin" id="fdf-m1-eUM"/>
+                                                <constraint firstItem="BzQ-fi-7rd" firstAttribute="top" secondItem="gHZ-jd-ug7" secondAttribute="bottom" constant="12" id="g7j-tW-fGR"/>
+                                                <constraint firstItem="FOt-KF-tZe" firstAttribute="top" secondItem="BzQ-fi-7rd" secondAttribute="bottom" constant="12" id="ten-vn-SkZ"/>
+                                                <constraint firstItem="FOt-KF-tZe" firstAttribute="leading" secondItem="SfZ-oz-Gpf" secondAttribute="leadingMargin" id="uNW-z8-oFz"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="51p-9z-yws" id="j5M-VW-Dbl"/>
+                            <outlet property="delegate" destination="51p-9z-yws" id="Xrz-ga-jDF"/>
+                        </connections>
+                    </tableView>
                     <connections>
-                        <outlet property="label" destination="iEg-EI-tNt" id="eTq-FE-vby"/>
-                        <outlet property="odometer" destination="a1a-nO-XQ1" id="KNw-4R-ala"/>
-                        <outlet property="odometer2" destination="hQN-0Z-maW" id="Rk7-44-c6W"/>
-                        <outlet property="slider" destination="51Q-xm-CLp" id="0Qp-sK-7l3"/>
+                        <outlet property="currencyLabel1" destination="BzQ-fi-7rd" id="HBr-7e-xGc"/>
+                        <outlet property="currencySlider1" destination="FOt-KF-tZe" id="Fjs-Fw-gbm"/>
+                        <outlet property="dateOdometerLabel" destination="xSm-gU-g6v" id="rZN-5m-31W"/>
                     </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="m7M-Fq-eY8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
+            <point key="canvasLocation" x="-243.47826086956525" y="76.339285714285708"/>
         </scene>
     </scenes>
 </document>

@@ -7,19 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D386B2572208A35400781686 /* OdometerLabelV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D386B2562208A35400781686 /* OdometerLabelV2.swift */; };
+		D386B2572208A35400781686 /* OdometerLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D386B2562208A35400781686 /* OdometerLabel.swift */; };
 		D397FB1721F7A6CA00AF3F9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D397FB1621F7A6CA00AF3F9D /* AppDelegate.swift */; };
-		D397FB1921F7A6CA00AF3F9D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D397FB1821F7A6CA00AF3F9D /* ViewController.swift */; };
+		D397FB1921F7A6CA00AF3F9D /* OdometerLabelDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D397FB1821F7A6CA00AF3F9D /* OdometerLabelDemoViewController.swift */; };
 		D397FB1C21F7A6CA00AF3F9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D397FB1A21F7A6CA00AF3F9D /* Main.storyboard */; };
 		D397FB1E21F7A6CB00AF3F9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D397FB1D21F7A6CB00AF3F9D /* Assets.xcassets */; };
 		D397FB2121F7A6CB00AF3F9D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D397FB1F21F7A6CB00AF3F9D /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D386B2562208A35400781686 /* OdometerLabelV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerLabelV2.swift; sourceTree = "<group>"; };
+		D386B2562208A35400781686 /* OdometerLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerLabel.swift; sourceTree = "<group>"; };
 		D397FB1321F7A6CA00AF3F9D /* OdometerTry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OdometerTry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D397FB1621F7A6CA00AF3F9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D397FB1821F7A6CA00AF3F9D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D397FB1821F7A6CA00AF3F9D /* OdometerLabelDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerLabelDemoViewController.swift; sourceTree = "<group>"; };
 		D397FB1B21F7A6CA00AF3F9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D397FB1D21F7A6CB00AF3F9D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D397FB2021F7A6CB00AF3F9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -57,12 +57,12 @@
 			isa = PBXGroup;
 			children = (
 				D397FB1621F7A6CA00AF3F9D /* AppDelegate.swift */,
-				D397FB1821F7A6CA00AF3F9D /* ViewController.swift */,
+				D397FB1821F7A6CA00AF3F9D /* OdometerLabelDemoViewController.swift */,
 				D397FB1A21F7A6CA00AF3F9D /* Main.storyboard */,
 				D397FB1D21F7A6CB00AF3F9D /* Assets.xcassets */,
 				D397FB1F21F7A6CB00AF3F9D /* LaunchScreen.storyboard */,
 				D397FB2221F7A6CB00AF3F9D /* Info.plist */,
-				D386B2562208A35400781686 /* OdometerLabelV2.swift */,
+				D386B2562208A35400781686 /* OdometerLabel.swift */,
 			);
 			path = OdometerTry;
 			sourceTree = "<group>";
@@ -138,9 +138,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D397FB1921F7A6CA00AF3F9D /* ViewController.swift in Sources */,
+				D397FB1921F7A6CA00AF3F9D /* OdometerLabelDemoViewController.swift in Sources */,
 				D397FB1721F7A6CA00AF3F9D /* AppDelegate.swift in Sources */,
-				D386B2572208A35400781686 /* OdometerLabelV2.swift in Sources */,
+				D386B2572208A35400781686 /* OdometerLabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

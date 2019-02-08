@@ -13,9 +13,9 @@ class OdometerLabel: UIView {
      4. Text Color
      5. Horizontal Spacing
      */
-    var animationDuration: TimeInterval = 2
+    var animationDuration: TimeInterval = 0.25
 
-    var textAlignment: NSTextAlignment = .center {
+    var textAlignment: NSTextAlignment = .left {
         didSet {
             self.setNumber(self.number, animated: false)
         }
@@ -51,7 +51,7 @@ class OdometerLabel: UIView {
         }
     }
 
-    var textColor: UIColor = UIColor.red {
+    var textColor: UIColor = UIColor.darkGray {
         didSet {
             for layer in self.digitLayers {
                 layer.foregroundColor = self.textColor.cgColor
