@@ -8,6 +8,8 @@ class OdometerLabelDemoViewController: UITableViewController {
     @IBOutlet weak var currencySlider1: UISlider!
     @IBOutlet weak var currencyLabel1: OdometerLabel!
 
+    @IBOutlet weak var odometerStyleLabel: OdometerLabel!
+    @IBOutlet weak var odometerStyleSlider: UISlider!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,8 +20,11 @@ class OdometerLabelDemoViewController: UITableViewController {
         })
 
         self.currencySlider1.addTarget(self, action: #selector(sliderValueChanged(sender:)), for: .valueChanged)
-
+        self.odometerStyleSlider.addTarget(self, action: #selector(sliderValueChanged(sender:)), for: .valueChanged)
         self.sliderValueChanged(sender: self.currencySlider1)
+
+        self.odometerStyleLabel.horizontalSpacing = 4
+        self.odometerStyleLabel.animationDuration = 2
     }
 
     private func updateDateLabel() {
@@ -30,14 +35,16 @@ class OdometerLabelDemoViewController: UITableViewController {
     }
 
     @objc func sliderValueChanged(sender: UIControl) {
-        if self.currencySlider1 == currencySlider1 {
+        if self.currencySlider1 == sender {
             let formatter = NumberFormatter()
             formatter.numberStyle = .currency
             formatter.locale = Locale(identifier: "en_CA")
             let number = Int(self.currencySlider1.value)
             self.currencyLabel1.setNumber(formatter.string(from: number as NSNumber)!, animated: true)
+        } else if self.odometerStyleSlider == sender {
+            let number = Int(self.odometerStyleSlider.value)
+            self.odometerStyleLabel.setNumber(String(number), animated: true)
         }
-
     }
 }
 

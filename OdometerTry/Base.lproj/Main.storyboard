@@ -119,6 +119,49 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="163" id="Vdb-UV-kp7">
+                                        <rect key="frame" x="0.0" y="336" width="414" height="163"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Vdb-UV-kp7" id="gwh-41-56a">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="162.66666666666666"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Odometer Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P1i-F1-Dmh">
+                                                    <rect key="frame" x="20" y="11" width="374" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="24" id="xsh-Gb-eQR"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dR9-Ug-JFt" customClass="OdometerLabel" customModule="OdometerTry" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="47" width="374" height="64"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="64" id="SNU-dY-zgZ"/>
+                                                    </constraints>
+                                                </view>
+                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="3000" minValue="3000" maxValue="20000" translatesAutoresizingMaskIntoConstraints="NO" id="F5R-VO-WIh">
+                                                    <rect key="frame" x="18" y="123" width="378" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="29" id="WLM-ed-4uk"/>
+                                                    </constraints>
+                                                </slider>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="F5R-VO-WIh" firstAttribute="leading" secondItem="gwh-41-56a" secondAttribute="leadingMargin" id="53w-dd-ogg"/>
+                                                <constraint firstItem="F5R-VO-WIh" firstAttribute="trailing" secondItem="gwh-41-56a" secondAttribute="trailingMargin" id="Isz-bf-pVp"/>
+                                                <constraint firstItem="dR9-Ug-JFt" firstAttribute="top" secondItem="P1i-F1-Dmh" secondAttribute="bottom" constant="12" id="MCJ-Gv-sP8"/>
+                                                <constraint firstItem="F5R-VO-WIh" firstAttribute="top" secondItem="dR9-Ug-JFt" secondAttribute="bottom" constant="12" id="UFy-uE-1a3"/>
+                                                <constraint firstItem="dR9-Ug-JFt" firstAttribute="leading" secondItem="gwh-41-56a" secondAttribute="leadingMargin" id="Vra-ar-sue"/>
+                                                <constraint firstItem="P1i-F1-Dmh" firstAttribute="top" secondItem="gwh-41-56a" secondAttribute="topMargin" id="j54-MT-Kwf"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="P1i-F1-Dmh" secondAttribute="trailing" id="lRS-wJ-Mbf"/>
+                                                <constraint firstItem="P1i-F1-Dmh" firstAttribute="leading" secondItem="gwh-41-56a" secondAttribute="leadingMargin" id="uRu-OI-eDG"/>
+                                                <constraint firstItem="dR9-Ug-JFt" firstAttribute="trailing" secondItem="gwh-41-56a" secondAttribute="trailingMargin" id="yDG-Zc-ghv"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -131,6 +174,8 @@
                         <outlet property="currencyLabel1" destination="BzQ-fi-7rd" id="HBr-7e-xGc"/>
                         <outlet property="currencySlider1" destination="FOt-KF-tZe" id="Fjs-Fw-gbm"/>
                         <outlet property="dateOdometerLabel" destination="xSm-gU-g6v" id="rZN-5m-31W"/>
+                        <outlet property="odometerStyleLabel" destination="dR9-Ug-JFt" id="Si6-dA-Vsb"/>
+                        <outlet property="odometerStyleSlider" destination="F5R-VO-WIh" id="ahN-64-TUD"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m7M-Fq-eY8" userLabel="First Responder" sceneMemberID="firstResponder"/>
