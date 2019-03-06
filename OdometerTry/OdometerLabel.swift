@@ -232,6 +232,11 @@ class OdometerLabel: UIView {
     public func setNumber(_ number: String, animated: Bool) {
         let result = decode_segments(from: number)
 
+        for layer in self.allLayers {
+            layer.removeAllAnimations()
+        }
+        contentLayer.removeAllAnimations()
+
         /* Remove any extra text layers */
         while self.textLayers.count > result.textCount {
             let last = self.textLayers.removeLast()
@@ -307,10 +312,6 @@ class OdometerLabel: UIView {
             for layer in self.allLayers {
                 layer.opacity = 0
             }
-            for layer in self.allLayers {
-                layer.removeAllAnimations()
-            }
-            contentLayer.removeAllAnimations()
             CATransaction.begin()
             CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
             CATransaction.setCompletionBlock {

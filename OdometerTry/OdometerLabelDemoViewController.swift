@@ -43,7 +43,10 @@ class OdometerLabelDemoViewController: UITableViewController {
             self.currencyLabel1.setNumber(formatter.string(from: number as NSNumber)!, animated: true)
         } else if self.odometerStyleSlider == sender {
             let number = Int(self.odometerStyleSlider.value)
-            self.odometerStyleLabel.setNumber(String(number), animated: true)
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            formatter.locale = Locale(identifier: "en_CA")
+            self.odometerStyleLabel.setNumber(formatter.string(from: number as NSNumber)!, animated: true)
         }
     }
 }
