@@ -304,9 +304,9 @@ class OdometerLabel: UIView {
             }
         } else {
             self.number = number
-            for layer in self.allLayers {
-                layer.opacity = 0
-            }
+//            for layer in self.allLayers {
+//                layer.opacity = 0
+//            }
             for layer in self.allLayers {
                 layer.removeAllAnimations()
             }
@@ -314,9 +314,9 @@ class OdometerLabel: UIView {
             CATransaction.begin()
             CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
             CATransaction.setCompletionBlock {
-                for layer in self.allLayers {
-                    layer.opacity = 1
-                }
+//                for layer in self.allLayers {
+//                    layer.opacity = 1
+//                }
             }
             self.doLayoutNumber(measureSize: result.digitCount + result.textCount)
             self.calculateScrollPositions(animationMode: false)

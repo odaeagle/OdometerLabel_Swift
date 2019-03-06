@@ -8,6 +8,7 @@ class OdometerLabelDemoViewController: UITableViewController {
     @IBOutlet weak var currencySlider1: UISlider!
     @IBOutlet weak var currencyLabel1: OdometerLabel!
 
+    @IBOutlet weak var animationSwitch: UISwitch!
     @IBOutlet weak var odometerStyleLabel: OdometerLabel!
     @IBOutlet weak var odometerStyleSlider: UISlider!
 
@@ -46,7 +47,7 @@ class OdometerLabelDemoViewController: UITableViewController {
             let formatter = NumberFormatter()
             formatter.numberStyle = .decimal
             formatter.locale = Locale(identifier: "en_CA")
-            self.odometerStyleLabel.setNumber(formatter.string(from: number as NSNumber)!, animated: true)
+            self.odometerStyleLabel.setNumber(formatter.string(from: number as NSNumber)!, animated: self.animationSwitch.isOn)
         }
     }
 }

@@ -148,8 +148,17 @@
                                                         <constraint firstAttribute="height" constant="29" id="WLM-ed-4uk"/>
                                                     </constraints>
                                                 </slider>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JXm-a1-kuC">
+                                                    <rect key="frame" x="347" y="8" width="49" height="31"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="31" id="xFS-tn-qv2"/>
+                                                        <constraint firstAttribute="width" constant="47" id="z3z-Ps-s9i"/>
+                                                    </constraints>
+                                                </switch>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="JXm-a1-kuC" firstAttribute="top" secondItem="gwh-41-56a" secondAttribute="top" constant="8" id="2ya-zt-ALX"/>
+                                                <constraint firstAttribute="trailing" secondItem="JXm-a1-kuC" secondAttribute="trailing" constant="20" id="4ce-67-SO7"/>
                                                 <constraint firstItem="F5R-VO-WIh" firstAttribute="leading" secondItem="gwh-41-56a" secondAttribute="leadingMargin" id="53w-dd-ogg"/>
                                                 <constraint firstItem="F5R-VO-WIh" firstAttribute="trailing" secondItem="gwh-41-56a" secondAttribute="trailingMargin" id="Isz-bf-pVp"/>
                                                 <constraint firstItem="dR9-Ug-JFt" firstAttribute="top" secondItem="P1i-F1-Dmh" secondAttribute="bottom" constant="12" id="MCJ-Gv-sP8"/>
@@ -171,6 +180,7 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="animationSwitch" destination="JXm-a1-kuC" id="Wv5-7I-Lm8"/>
                         <outlet property="currencyLabel1" destination="BzQ-fi-7rd" id="HBr-7e-xGc"/>
                         <outlet property="currencySlider1" destination="FOt-KF-tZe" id="Fjs-Fw-gbm"/>
                         <outlet property="dateOdometerLabel" destination="xSm-gU-g6v" id="rZN-5m-31W"/>
