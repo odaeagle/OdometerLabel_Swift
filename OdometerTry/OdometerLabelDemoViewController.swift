@@ -48,6 +48,13 @@ class OdometerLabelDemoViewController: UITableViewController {
             formatter.numberStyle = .decimal
             formatter.locale = Locale(identifier: "en_CA")
             self.odometerStyleLabel.setNumber(formatter.string(from: number as NSNumber)!, animated: self.animationSwitch.isOn)
+
+            if !self.animationSwitch.isOn {
+                print("show", number)
+                DispatchQueue.main.async {
+                    self.odometerStyleLabel.setNumber(formatter.string(from: (number + 22) as NSNumber)!, animated: true)
+                }
+            }
         }
     }
 }

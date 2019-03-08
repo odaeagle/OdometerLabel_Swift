@@ -1,6 +1,5 @@
 import UIKit
 
-
 class OdometerLabel: UIView {
 
     private static let digits = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
@@ -34,7 +33,8 @@ class OdometerLabel: UIView {
 
             let size = attributedText.size()
             let preferedSize = textLayer.preferredFrameSize()
-            self.singleDigitSize = CGSize(width: size.width, height: preferedSize.height / 30)
+            self.singleDigitSize = CGSize(width: ceil(size.width),
+                                          height: preferedSize.height / 30)
             self.recycleTextLayer(textLayer)
 
             for layer in self.digitLayers {
@@ -71,7 +71,7 @@ class OdometerLabel: UIView {
 
     /* Private attributes */
 
-    private(set) var number: String = "0"
+    private(set) var number: String = ""
     private(set) var contentLayer = CALayer()
 
     /* Digit layer must be wrapped inside scroll layer,
@@ -304,20 +304,12 @@ class OdometerLabel: UIView {
             }
         } else {
             self.number = number
-//            for layer in self.allLayers {
-//                layer.opacity = 0
-//            }
             for layer in self.allLayers {
                 layer.removeAllAnimations()
             }
             contentLayer.removeAllAnimations()
             CATransaction.begin()
             CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
-            CATransaction.setCompletionBlock {
-//                for layer in self.allLayers {
-//                    layer.opacity = 1
-//                }
-            }
             self.doLayoutNumber(measureSize: result.digitCount + result.textCount)
             self.calculateScrollPositions(animationMode: false)
             CATransaction.commit()
