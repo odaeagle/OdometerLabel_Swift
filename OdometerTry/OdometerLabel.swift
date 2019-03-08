@@ -137,7 +137,7 @@ class OdometerLabel: UIView {
         let digitHeight = self.singleDigitSize?.height ?? 0
         /* Layout all layers */
         var xStart: CGFloat = width
-        var xMin: CGFloat = 0
+        var xMin: CGFloat = width
         for index in self.allLayers.indices {
             let layerSize = self.sizeForLayer(self.allLayers[index])
             self.allLayers[index].frame = CGRect(x: xStart - layerSize.width,

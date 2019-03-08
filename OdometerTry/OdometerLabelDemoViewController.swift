@@ -15,11 +15,13 @@ class OdometerLabelDemoViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.dateOdometerLabel.textAlignment = .center
         self.updateDateLabel()
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
             self.updateDateLabel()
         })
 
+        self.currencyLabel1.textAlignment = .right
         self.currencySlider1.addTarget(self, action: #selector(sliderValueChanged(sender:)), for: .valueChanged)
         self.odometerStyleSlider.addTarget(self, action: #selector(sliderValueChanged(sender:)), for: .valueChanged)
         self.sliderValueChanged(sender: self.currencySlider1)
