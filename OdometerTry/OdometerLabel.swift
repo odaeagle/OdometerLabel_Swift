@@ -106,8 +106,11 @@ class OdometerLabel: UIView {
 
     override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
+        CATransaction.begin()
+        CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
         self.doLayoutNumber()
         self.calculateScrollPositions(animationMode: false)
+        CATransaction.commit()
     }
 
     override func sizeToFit() {
